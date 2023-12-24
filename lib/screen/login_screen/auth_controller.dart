@@ -14,6 +14,7 @@ class AuthController extends GetxController {
   var userController = TextEditingController();
   var phoneController = TextEditingController();
    final otpController = List.generate(6, (index) => TextEditingController());
+   RxBool userLoggedIn = false.obs; 
 
   // final otpController = List.generate(6, (index) => TextEditingController());
   var otpNumber = ''.obs;
@@ -56,13 +57,11 @@ class AuthController extends GetxController {
     );
   }
 
+
   verifyOtp() async {
     String otp = '';
     otp = otpNumber.value;
-
-    // for (var i = 0; i < otpController.length; i++) {
-    //   otp += otpController[i].text;
-    // }
+    print("otpppp${otp}");
 
     try {
       PhoneAuthCredential credential = await PhoneAuthProvider.credential(
@@ -70,17 +69,27 @@ class AuthController extends GetxController {
 
       final User? user = (await auth.signInWithCredential(credential)).user;
       if (user != null) {
-        print('otp ${otp}');
-        print("success");
-        print("useridd----==>${user.uid}");
-         Get.snackbar('Success', 'Logging in',colorText: ColorConstant.redcolor);
+        userLoggedIn.value = true;
+        Get.snackbar('Success', 'Logging in', colorText: ColorConstant.white);
+        otpNumber.value = "";
+        for (var i = 0; i < otpController.length; i++) {
+          otpController[i].text = '';
+        }
       } else {
-        print("fail");
-        print('otp ${otp}');
+        Get.snackbar('oops..', 'Verfication failed',
+            colorText: ColorConstant.redcolor);
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'session-expired' && userLoggedIn.value == false) {
+        Get.snackbar('Oops..', 'OTP has expired. Please request a new one.',
+            colorText: ColorConstant.redcolor);
+      } else {
+        Get.snackbar('Oops..', 'Incorrect OTP',
+            colorText: ColorConstant.redcolor);
       }
     } catch (e) {
-      print('otp ${otp}');
-      Get.snackbar('oops..', 'Verfication failed',colorText: ColorConstant.redcolor);
+      Get.snackbar('Oops..', 'An unexpected error occurred',
+          colorText: ColorConstant.redcolor);
     }
   }
 

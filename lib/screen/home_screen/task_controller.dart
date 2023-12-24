@@ -104,7 +104,7 @@ class TaskController extends GetxController {
     if (sortCriteria == '1') {
       sortedTasks.sort((a, b) => a.title!.compareTo(b.title!));
     } else if (sortCriteria == '2') {
-      sortedTasks.sort((a, b) => a.time!.compareTo(b.time!));
+      sortedTasks.sort((a, b) => b.time!.compareTo(a.time!));
     }
 
     return sortedTasks.where((task) {

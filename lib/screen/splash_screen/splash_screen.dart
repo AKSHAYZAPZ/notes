@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:notes_app/consts/image_constants.dart';
 import 'package:notes_app/screen/login_screen/auth_controller.dart';
 
 
@@ -19,9 +20,9 @@ class SplashScreen extends StatelessWidget {
             height: 200,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              // image: DecorationImage(
-              //   image: AssetImage(AssetImages.splashImg),
-              // ),
+              image: DecorationImage(
+                image: AssetImage(AssetImages.splshImg),
+              ),
             ),
           )
         ],
